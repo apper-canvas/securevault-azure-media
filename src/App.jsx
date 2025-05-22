@@ -54,7 +54,6 @@ function App() {
       <div className="fixed top-4 right-4 z-50">
         <button
           onClick={() => setIsDarkMode(!isDarkMode)}
-          className="p-2 rounded-full bg-surface-200 dark:bg-surface-700 text-surface-800 dark:text-surface-200 transition-colors"
           aria-label="Toggle dark mode"
           className="p-2 rounded-full bg-surface-200 dark:bg-surface-700 text-surface-800 dark:text-surface-200 transition-colors shadow-soft"
         >
