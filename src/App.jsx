@@ -38,6 +38,8 @@ function App() {
     return savedTheme ? savedTheme === 'dark' : prefersDark;
   });
 
+  const { isAuthenticated, user } = useSelector(state => state.auth);
+
   useEffect(() => {
     if (isDarkMode) {
       document.documentElement.classList.add('dark');
@@ -45,11 +47,8 @@ function App() {
     } else {
       document.documentElement.classList.remove('dark');
       localStorage.setItem('theme', 'light');
-  
-  const { isAuthenticated, user } = useSelector(state => state.auth);
     }
   }, [isDarkMode]);
-
   return (
     <>
       <div className="fixed top-4 right-4 z-50">
@@ -57,18 +56,23 @@ function App() {
           onClick={() => setIsDarkMode(!isDarkMode)}
           className="p-2 rounded-full bg-surface-200 dark:bg-surface-700 text-surface-800 dark:text-surface-200 transition-colors"
           aria-label="Toggle dark mode"
+          className="p-2 rounded-full bg-surface-200 dark:bg-surface-700 text-surface-800 dark:text-surface-200 transition-colors shadow-soft"
         >
           {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+          {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
         </button>
       </div>
 
-          className="p-2 rounded-full bg-surface-200 dark:bg-surface-700 text-surface-800 dark:text-surface-200 transition-colors shadow-soft"
-        <Route path="/" element={<Home />} />
-        <Route path="*" element={<NotFound />} />
-          {isDarkMode ? <Sun size={18} /> : <Moon size={18} />}
-
       <ToastContainer
         position="top-right"
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme={isDarkMode ? "dark" : "light"}
+        toastClassName="rounded-lg shadow-lg font-medium"
+      />
+
       <Suspense fallback={<LoadingScreen />}>
         <Routes>
           {/* Public routes */}
@@ -78,7 +82,7 @@ function App() {
           <Route element={<AuthLayout />}>
             <Route path="/login" element={!isAuthenticated ? <Login /> : <Navigate to="/dashboard" />} />
             <Route path="/register" element={!isAuthenticated ? <Register /> : <Navigate to="/dashboard" />} />
-            <Route path="/forgot-password" element={!isAuthenticated ? <lazy(() => import('./features/auth/ForgotPassword')).default /> : <Navigate to="/dashboard" />} />
+            <Route path="/forgot-password" element={!isAuthenticated ? <ForgotPassword /> : <Navigate to="/dashboard" />} />
           </Route>
           
           {/* Protected app routes */}
@@ -90,35 +94,28 @@ function App() {
             <Route path="/bill-payments" element={isAuthenticated ? <BillPayments /> : <Navigate to="/login" />} />
             
             {/* Loan routes */}
-            <Route path="/loans" element={isAuthenticated ? <lazy(() => import('./features/loans/LoansOverview')).default /> : <Navigate to="/login" />} />
+            <Route path="/loans" element={isAuthenticated ? <LoansOverview /> : <Navigate to="/login" />} />
             <Route path="/loans/apply" element={isAuthenticated ? <LoanApplication /> : <Navigate to="/login" />} />
-            <Route path="/loans/:id" element={isAuthenticated ? <lazy(() => import('./features/loans/LoanDetails')).default /> : <Navigate to="/login" />} />
+            <Route path="/loans/:id" element={isAuthenticated ? <LoanDetails /> : <Navigate to="/login" />} />
             
             {/* Gold mortgage routes */}
             <Route path="/gold" element={isAuthenticated ? <GoldMortgage /> : <Navigate to="/login" />} />
             
             {/* Support routes */}
             <Route path="/support" element={isAuthenticated ? <CustomerSupport /> : <Navigate to="/login" />} />
-            <Route path="/profile" element={isAuthenticated ? <lazy(() => import('./features/profile/UserProfile')).default /> : <Navigate to="/login" />} />
+            <Route path="/profile" element={isAuthenticated ? <UserProfile /> : <Navigate to="/login" />} />
           </Route>
           
           {/* Admin routes */}
           <Route element={<AdminLayout />}>
             <Route path="/admin" element={isAuthenticated && user?.role === 'admin' ? <AdminDashboard /> : <Navigate to="/login" />} />
-            <Route path="/admin/users" element={isAuthenticated && user?.role === 'admin' ? <lazy(() => import('./features/admin/UserManagement')).default /> : <Navigate to="/login" />} />
-            <Route path="/admin/loans" element={isAuthenticated && user?.role === 'admin' ? <lazy(() => import('./features/admin/LoanApplications')).default /> : <Navigate to="/login" />} />
+            <Route path="/admin/users" element={isAuthenticated && user?.role === 'admin' ? <UserManagement /> : <Navigate to="/login" />} />
+            <Route path="/admin/loans" element={isAuthenticated && user?.role === 'admin' ? <LoanApplications /> : <Navigate to="/login" />} />
           </Route>
           
           <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme={isDarkMode ? "dark" : "light"}
-        toastClassName="rounded-lg shadow-lg font-medium"
-      />
     </>
   );
 }
