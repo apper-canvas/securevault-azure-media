@@ -14,6 +14,7 @@ import LoadingScreen from './components/common/LoadingScreen';
 const Home = lazy(() => import('./pages/Home'));
 const Login = lazy(() => import('./features/auth/LoginScreen'));
 const Register = lazy(() => import('./features/auth/RegisterScreen'));
+const ForgotPassword = lazy(() => import('./features/auth/ForgotPassword'));
 const Dashboard = lazy(() => import('./features/dashboard/Dashboard'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 const AccountDetails = lazy(() => import('./features/accounts/AccountDetails'));
@@ -21,9 +22,14 @@ const TransactionHistory = lazy(() => import('./features/accounts/TransactionHis
 const FundTransfer = lazy(() => import('./features/transfers/FundTransfer'));
 const BillPayments = lazy(() => import('./features/payments/BillPayments'));
 const LoanApplication = lazy(() => import('./features/loans/LoanApplication'));
+const LoansOverview = lazy(() => import('./features/loans/LoansOverview'));
+const LoanDetails = lazy(() => import('./features/loans/LoanDetails'));
 const GoldMortgage = lazy(() => import('./features/gold/GoldMortgage'));
 const CustomerSupport = lazy(() => import('./features/support/CustomerSupport'));
 const AdminDashboard = lazy(() => import('./features/admin/AdminDashboard'));
+const UserManagement = lazy(() => import('./features/admin/UserManagement'));
+const LoanApplications = lazy(() => import('./features/admin/LoanApplications'));
+const UserProfile = lazy(() => import('./features/profile/UserProfile'));
 
 function App() {
   const [isDarkMode, setIsDarkMode] = useState(() => {
